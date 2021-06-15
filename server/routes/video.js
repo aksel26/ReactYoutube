@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router()
-// const { Video } = require("../models/Video");
+const { Video } = require("../models/Video")
 
 const { auth } = require("../middleware/auth")
 const multer = require("multer")
@@ -24,7 +24,7 @@ let storage = multer.diskStorage({
 
 const upload = multer({ storage: storage }).single("file")
 
-//=================================
+//=================================ㄴ
 //             Video
 //=================================
 router.post("/uploadFiles", (req, res) => {
@@ -43,7 +43,59 @@ router.post("/uploadFiles", (req, res) => {
     })
   })
 })
-router.post("/thumbnail", (res, req) => {
+
+router.post("/uploadVideo", (req, res) => {
+  // 비디오 정보들을 저장한다.
+
+  //클라이언트단에서의 정보가 모두 requ에 담겨잇다.
+  const video = new Video(req.body)
+
+  video.save((err, doc) => {
+    if (err) return res.json({ success: false, err })
+    res.status(200).json({ success: true })
+  })
+})
+router.post("/thumbnail", (req, res) => {
   //썸네일 생성하고 비디오 러닝 타임도 가젹오기
+  // 러닝타임을 가져오기 위해 ffmpeg 사용
+
+  let filePath = ""
+  let fileDuration = ""
+  // 비디오 정보 가져오기
+  // 비디오의 duration을 가져오려면 ffprobe를 이용하면 된다
+
+  ffmpeg.ffprobe(req.body.url, function (err, metadata) {
+    fileDuration = metadata.format.duration
+  })
+
+  //썸네일 생성
+  ffmpeg(req.body.url)
+    .on("filenames", (filenames) => {
+      console.log("will generate : ", filenames.join(", "))
+      console.log(filenames)
+
+      filePath = "/uploads/thumbnails/" + filenames[0]
+    })
+
+    .on("end", () => {
+      console.log("Screenshots taken")
+      return res.json({
+        success: true,
+        url: filePath,
+        fileDuration: fileDuration,
+      })
+    })
+    .on("error", (res) => {
+      console.log(err)
+      return res.json({ success: "false", err })
+    })
+
+    .screenshots({
+      //3의 썸네일 가능
+      count: 3,
+      folder: "uploads/thumbnails",
+      size: "320x240",
+      filename: "thumbnail-%b.png",
+    })
 })
 module.exports = router
