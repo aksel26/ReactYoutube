@@ -55,6 +55,17 @@ router.post("/uploadVideo", (req, res) => {
     res.status(200).json({ success: true })
   })
 })
+
+router.get("/getVideos", (req, res) => {
+  //비디오를 DB에서 가져와서 client에 보낸다.
+  Video.find()
+    .populate("writer")
+    .exec((err, videos) => {
+      if (err) return res.status(400).send(err)
+      res.status(200).json({ success: true, videos })
+    })
+})
+
 router.post("/thumbnail", (req, res) => {
   //썸네일 생성하고 비디오 러닝 타임도 가젹오기
   // 러닝타임을 가져오기 위해 ffmpeg 사용
