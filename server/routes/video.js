@@ -66,6 +66,17 @@ router.get("/getVideos", (req, res) => {
     })
 })
 
+
+router.post("/getVideoDetail", (req, res) => {
+  console.log(req)
+  Video.findOne({ "_id": req.body.videoId })
+    .populate("writer")
+    .exec((err, videoDetail) => {
+      if (err) return res.status(400).send(err)
+      return res.status(200).json({ success: true, videoDetail })
+    })
+})
+
 router.post("/thumbnail", (req, res) => {
   //썸네일 생성하고 비디오 러닝 타임도 가젹오기
   // 러닝타임을 가져오기 위해 ffmpeg 사용
