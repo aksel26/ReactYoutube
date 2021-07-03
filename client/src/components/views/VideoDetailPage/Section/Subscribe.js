@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import axios from "axios"
+import { response } from "express"
 
 function Subscribe(props) {
   const [SubscribeNumber, setSubscribeNumber] = useState(0)
@@ -30,6 +31,39 @@ function Subscribe(props) {
       })
     return () => {}
   }, [])
+
+  // const onSubscribe = () => {
+  //   let subscribeVariabe = {
+  //     userTo: props.userTo,
+  //     userFrom: props.userFrom,
+  //   }
+
+  //   if (Subscribed) {
+  //     //이미 구독중
+  //     axios
+  //       .post("/api/subscribe/unSubscribe", subscribeVariabe)
+  //       .then((response) => {
+  //         if (response.data.success) {
+  //           setSubscribeNumber(SubscribeNumber - 1)
+  //           setSubscribed(!Subscribed)
+  //         } else {
+  //           alert("구독취소 실패")
+  //         }
+  //       })
+  //   } else {
+  //     //구동중이 아닐경우
+  //     axios
+  //       .post("/api/subscribe/subscirbe", subscribeVariabe)
+  //       .then((response) => {
+  //         if (response.data.success) {
+  //           setSubscribeNumber(SubscribeNumber + 1)
+  //           setSubscribed(!Subscribed)
+  //         } else {
+  //           alert("구독취소 실패")
+  //         }
+  //       })
+  //   }
+  // }
   return (
     <div>
       <button
@@ -42,9 +76,7 @@ function Subscribe(props) {
           fontSize: "1rem",
           textTransform: "uppercase",
         }}
-        onClick={() => {
-          setSubscribed(true)
-        }}
+        // onClick={onSubscribe}
       >
         {SubscribeNumber} {Subscribed ? "Subscribed" : "subscribe"}
       </button>
