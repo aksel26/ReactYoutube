@@ -29,10 +29,11 @@ function VideoDetailPage(props) {
               src={`http://localhost:5000/${VideoDetail?.filePath}`}
               controls
             />
+            {console.log(VideoDetail.writer._id)}
             <List.Item
               actions={[
                 <Subscribe
-                  userTo={VideoDetail?.writer?._id}
+                  userTo={VideoDetail._id}
                   userFrom={localStorage.getItem("userId")}
                 />,
               ]}

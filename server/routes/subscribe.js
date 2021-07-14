@@ -2,7 +2,7 @@ const express = require("express")
 const router = express.Router()
 const { Subscriber } = require("../models/Subscriber")
 
-//=================================ㄴ
+//=================================
 //             Subscribe
 //=================================
 
@@ -40,10 +40,12 @@ router.post("/unsubscribed", (req, res) => {
 })
 
 router.post("/subscribe", (req, res) => {
+  console.log("DDDD", req.body)
   const subscribe = new Subscriber(req.body)
   subscribe.save((err, document) => {
     if (err) return res.json({ success: false, err })
     res.status(200).json({ success: true, document })
+    console.log("document: ", document)
   })
 })
 

@@ -5,6 +5,7 @@ const { Video } = require("../models/Video")
 const { auth } = require("../middleware/auth")
 const multer = require("multer")
 var ffmpeg = require("fluent-ffmpeg")
+const { Subscriber } = require("../models/Subscriber")
 
 let storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -54,6 +55,31 @@ router.post("/uploadVideo", (req, res) => {
     if (err) return res.json({ success: false, err })
     res.status(200).json({ success: true })
   })
+})
+
+router.post("/getSubscriptionVideos", (req, res) => {
+  // 자신의 아이디를 가지고 구독하는 사람들을 찾는다
+  Subscriber.find({ userFrom: req.body.userFrom }).exec(
+    (err, SubscriberInfo) => {
+      if (err) return res.status(200).send(err)
+
+      let subscribedUser = []
+
+      SubscriberInfo.map((subscriber, index) => {
+        subscribedUser.push(subscriber.userTo)
+      })
+
+      // 찾은 사람들의 비디오를 가지고 온다.
+      // 복수개의 유저정보가 담겨지므로 이렇게 하면 안됨. $in을 사용하면 된다.
+      // Video.find({writer :{req.body.id}})
+      Video.find({ _id: { $in: subscribedUser } })
+        .populate("_id")
+        .exec((err, videos) => {
+          if (err) return res.status(400).send(err)
+          res.status(200).json({ success: true, videos })
+        })
+    }
+  )
 })
 
 router.get("/getVideos", (req, res) => {
