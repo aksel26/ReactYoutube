@@ -9,6 +9,7 @@ const { Meta } = Card
 
 function LandingPage() {
   const [video, setVideo] = useState([])
+  console.log("video: ", video)
 
   useEffect(() => {
     Axios.get("/api/video/getVideos").then((response) => {
@@ -29,6 +30,7 @@ function LandingPage() {
       <Col key={index} lg={6} md={8} xs={24}>
         <div style={{ position: "relative" }}>
           <a href={`/video/${video._id}`}>
+            {console.log(video.thumbnail)}
             <img
               style={{ width: "100%" }}
               src={`http://localhost:5000/${video.thumbnail}`}
