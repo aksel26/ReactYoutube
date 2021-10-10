@@ -6,12 +6,15 @@ function SingleComment(props) {
   const user = useSelector((state) => state.user)
   const [openReply, setOpenReply] = useState(false)
   const [CommentValue, setCommentValue] = useState("")
+
   const onClickReplyOpen = () => {
     setOpenReply(!openReply)
   }
+
   const onHandleChange = (e) => {
-    setCommentValue(e.currentTarget.CommentValue)
+    setCommentValue(e.currentTarget.value)
   }
+
   const actions = [
     <span onClick={onClickReplyOpen} key="comment-basic--reply-to">
       Reply to
@@ -19,6 +22,7 @@ function SingleComment(props) {
   ]
   const onSubmit = (e) => {
     e.preventDefault()
+
     const variables = {
       content: CommentValue,
       writer: user.userData._id,
@@ -27,8 +31,9 @@ function SingleComment(props) {
     }
     Axios.post("/api/comment/saveComment", variables).then((response) => {
       if (response.data.success) {
-        props.refreshFunction(response.data.result)
         setCommentValue("")
+        setOpenReply(false)
+        props.refreshFunction(response.data.result)
       } else {
         alert("코멘트 저장 실패!")
       }
