@@ -11,11 +11,11 @@ router.post("/saveComment", (req, res) => {
   comment.save((err, comment) => {
     if (err) return res.json({ success: false, err })
 
-    Comment.find({ '_id': comment._id })
+    Comment.find({ _id: comment._id })
       .populate("writer")
       .exec((err, result) => {
         if (err) return res.json({ success: true, err })
-        res.status(200).json({ success: true, result })
+        return res.status(200).json({ success: true, result })
       })
 
     //     populate("writer")
@@ -26,7 +26,7 @@ router.post("/getComments", (req, res) => {
     .populate("writer")
     .exec((err, comments) => {
       if (err) return res.status(400).send(err)
-      res.status(200).json({ success: true, comments })
+      return res.status(200).json({ success: true, comments })
     })
 })
 

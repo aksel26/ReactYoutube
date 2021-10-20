@@ -20,6 +20,6 @@ const dislikeSchema = mongoose.Schema(
   { timestamp: true }
 ) // 만든날짜 , updqte날짜가 표시됨
 
-const Like = mongoose.model("DisLike", dislikeSchema)
+const DisLike = mongoose.model("DisLike", dislikeSchema)
 
 module.exports = { DisLike }
