@@ -120,7 +120,7 @@ router.post("/thumbnail", (req, res) => {
       console.log("will generate : ", filenames.join(", "))
       console.log(filenames)
 
-      filePath = "uploads/thumbnails/" + filenames[0]
+      filePath = "/uploads/thumbnails/" + filenames[0]
     })
 
     .on("end", () => {
